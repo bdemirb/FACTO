@@ -6,9 +6,10 @@
 
 import math
 
+import torch
+
 import facto.specdb.function as fn
 import facto.utils.dtypes as dt
-import torch
 from facto.inputgen.argument.type import ArgType
 from facto.inputgen.specs.model import (
     ConstraintProducer as cp,
@@ -705,7 +706,14 @@ SpecDB = [
     Spec(
         op="acos.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Ge(lambda deps, dtype, struct: -1.0),
+                    cp.Value.Le(lambda deps, dtype, struct: 1.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(ArgType.Tensor),
@@ -714,7 +722,13 @@ SpecDB = [
     Spec(
         op="acosh.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Ge(lambda deps, dtype, struct: 1.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(ArgType.Tensor),
@@ -1175,7 +1189,14 @@ SpecDB = [
     Spec(
         op="asin.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Ge(lambda deps, dtype, struct: -1.0),
+                    cp.Value.Le(lambda deps, dtype, struct: 1.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(ArgType.Tensor),
@@ -1231,7 +1252,14 @@ SpecDB = [
     Spec(
         op="atanh.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Gt(lambda deps, dtype, struct: -1.0),
+                    cp.Value.Lt(lambda deps, dtype, struct: 1.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(ArgType.Tensor),
@@ -2795,7 +2823,13 @@ SpecDB = [
     Spec(
         op="log.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Gt(lambda deps, dtype, struct: 0.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(
@@ -2810,7 +2844,13 @@ SpecDB = [
     Spec(
         op="log10.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Gt(lambda deps, dtype, struct: 0.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(
@@ -2825,7 +2865,13 @@ SpecDB = [
     Spec(
         op="log1p.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Gt(lambda deps, dtype, struct: -1.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(
@@ -2840,7 +2886,13 @@ SpecDB = [
     Spec(
         op="log2.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Gt(lambda deps, dtype, struct: 0.0),
+                ],
+            ),
         ],
         outspec=[
             OutArg(
@@ -4453,7 +4505,13 @@ SpecDB = [
     Spec(
         op="rsqrt.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Gt(lambda deps, dtype, struct: 0.0),
+                ],
+            ),
         ],
         outspec=[OutArg(ArgType.Tensor)],
     ),
@@ -5029,7 +5087,13 @@ SpecDB = [
     Spec(
         op="sqrt.default",  # (Tensor self) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                constraints=[
+                    cp.Value.Ge(lambda deps, dtype, struct: 0.0),
+                ],
+            ),
         ],
         outspec=[OutArg(ArgType.Tensor)],
     ),
