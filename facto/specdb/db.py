@@ -2097,10 +2097,9 @@ SpecDB = [
                     cp.Value.Ne(
                         lambda deps, dtype, struct: (
                             0
-                            if (deps[0].numel() > 0 and math.prod(struct) > 0)
+                            if deps[0].numel() > 0
+                            and math.prod(struct) > 0
                             and deps[1] is not None
-                            and torch.promote_types(deps[0].dtype, dtype)
-                            not in dt._floating
                             else None
                         )
                     ),
@@ -2376,10 +2375,7 @@ SpecDB = [
                     cp.Value.Ne(
                         lambda deps, dtype, struct: (
                             0
-                            if (deps[0].numel() > 0 and math.prod(struct) > 0)
-                            and torch.promote_types(deps[0].dtype, dtype)
-                            not in dt._floating
-                            else None
+                            if deps[0].numel() > 0 and math.prod(struct) > 0 else None
                         )
                     ),
                 ],
@@ -2965,7 +2961,19 @@ SpecDB = [
     Spec(
         op="logit.default",  # (Tensor self, float? eps=None) -> Tensor
         inspec=[
-            InPosArg(ArgType.Tensor, name="self"),
+            InPosArg(
+                ArgType.Tensor,
+                name="self",
+                deps=[1],
+                constraints=[
+                    cp.Value.Ge(
+                        lambda deps, dtype, struct: 0.0 if deps[0] is None else None
+                    ),
+                    cp.Value.Le(
+                        lambda deps, dtype, struct: 1.0 if deps[0] is None else None
+                    ),
+                ],
+            ),
             InPosArg(ArgType.FloatOpt, name="eps"),
         ],
         outspec=[
@@ -4188,10 +4196,7 @@ SpecDB = [
                     cp.Value.Ne(
                         lambda deps, dtype, struct: (
                             0
-                            if (deps[0].numel() > 0 and math.prod(struct) > 0)
-                            and torch.promote_types(deps[0].dtype, dtype)
-                            not in dt._floating
-                            else None
+                            if deps[0].numel() > 0 and math.prod(struct) > 0 else None
                         )
                     ),
                 ],
